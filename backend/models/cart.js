@@ -22,7 +22,9 @@ _id: {
             required: true
         }
     }],
-    totalAmount: Number,
+    totalAmount:{
+        type:Number
+    }
 })
-cart = mongoose.model('cart', cartSchema);
-export default cart;
+Cart = mongoose.model('cart', cartSchema);
+export default Cart;

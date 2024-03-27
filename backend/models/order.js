@@ -31,5 +31,5 @@ _id: {
   },
   createdAt: { type: Date, default: Date.now },
 })
-order = mongoose.model('order', orderSchema);
-export default order;
+Order = mongoose.model('order', orderSchema);
+export default Order;
