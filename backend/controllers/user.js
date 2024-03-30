@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const User = require('./models/user');
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
 
-// Function to register a new user
 const registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const newUser = new User({ username, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+        const newUser = new User({ username, email, password: hashedPassword }); // Store hashed password in the database
         await newUser.save();
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -14,14 +14,33 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Function to log in a user
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        if (!user || user.password !== password) {
+
+        console.log('User:', user);
+        console.log('User Password:', user ? user.password : null);
+
+        // Check if user exists
+        if (!user) {
+            return res.status(401).json({ message: 'Cant find no user biatch' });
+        }
+
+        // Compare hashed password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword)
+        let isPasswordValid=0;
+        if(password==hashedPassword)
+        {
+            isPasswordValid=1;
+        }
+        console.log('isPasswordValid:', isPasswordValid);
+
+        if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
+
         const token = generateToken(user);
         res.json({ token });
     } catch (error) {
@@ -29,7 +48,13 @@ const loginUser = async (req, res) => {
     }
 };
 
+
+
 const generateToken = (user) => {
-    return jwt.sign({ UserId: user._id }, 'your_secret_key', { expiresIn: '10h' });
+    return jwt.sign({ userId: user._id }, 'your_secret_key', { expiresIn: '10h' }); // Replace 'your_secret_key' with your actual secret key
 };
 
+module.exports = {
+    registerUser,
+    loginUser
+};

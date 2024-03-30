@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     _id:{
         type:Number,
-        required: true
     },
     name: {
         type: String,
@@ -23,5 +22,5 @@ const productSchema = mongoose.Schema({
     }
 })
 
-var product = mogoose.model('product', productSchema);
-export default product;
+var Product = mongoose.model('product', productSchema);
+module.exports = Product;

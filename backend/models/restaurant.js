@@ -1,32 +1,34 @@
 const mongoose = require('mongoose');
-import product from './product';
+const product = require('./product');
+
 
 const restaurantSchema = mongoose.Schema({
-    _id:{
-        type:Number,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
-    },
-    country: {
-        type: String,
-        required: true
-    },
-    products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
-    }]
-})
+  _id: {
+    type: Number,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+  products: [{
+    type:Number
+  }]
+});
+
+
 
 var restaurant = mongoose.model('restaurant', restaurantSchema);
-export default restaurant;
+module.exports = restaurant;
+
